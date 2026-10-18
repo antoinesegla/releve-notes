@@ -1,0 +1,11 @@
+[project]
+name = "releve-notes"
+version = "1.0.0"
+description = "Relevé de Notes - CPET LE PHENIX"
+dependencies = ["flet==0.27.6"]
+requires-python = ">=3.9"
+
+[tool.flet]
+org = "com.cpetphenix.releve"
+project_name = "ReleveNotes"
+description = "Relevé de Notes - Suivi académique CPET LE PHENIX"
