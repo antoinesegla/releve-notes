@@ -1,44 +1,42 @@
 name: Build APK
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
           flutter-version: '3.24.5'
+          channel: stable
 
-      - name: Install Flet
+      - name: Install Flet and build APK
         run: |
           pip install flet
           flutter config --no-analytics
-          flutter doctor
+          flet build apk --verbose
 
-      - name: Build APK
-        run: |
-          flet build apk --build-number=1 --build-version=1.0.0
-
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: releve-notes-apk
           path: build/apk
-          if-no-files-found: error
